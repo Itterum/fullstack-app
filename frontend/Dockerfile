@@ -1,23 +1,31 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 
-# Установка bun для более быстрой установки зависимостей
+# Установка bun
 RUN npm install -g bun
 
 WORKDIR /app
 
-# Копирование только файлов зависимостей для лучшего кэширования
+# Копирование зависимостей
 COPY package.json bun.lockb ./
 RUN bun install
 
-# Копирование остальных файлов проекта
+# Копирование исходного кода
 COPY . .
 
-# Сборка проекта для production
+# Сборка проекта
 RUN bun run build
 
-# Использование lightweight сервера для раздачи статических файлов
+# --- Финальный образ ---
 FROM nginx:alpine
-COPY --from=0 /app/dist /usr/share/nginx/html
+
+# Установка bun в финальном контейнере
+RUN apk add --no-cache nodejs npm \
+    && npm install -g bun
+
+WORKDIR /app
+
+# Копирование собранного фронтенда
+COPY --from=builder /app/dist /usr/share/nginx/html
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
