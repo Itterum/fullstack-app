@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: local-registry:5000/backend:latest
+        image: localhost:5000/backend:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
