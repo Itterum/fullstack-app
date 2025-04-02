@@ -13,7 +13,7 @@ RUN bun install
 COPY . .
 
 # Сборка проекта для production
-RUN npm run build
+RUN bun run build && bun run preview
 
 # Использование lightweight сервера для раздачи статических файлов
 FROM nginx:alpine

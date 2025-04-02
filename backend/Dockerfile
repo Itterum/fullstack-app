@@ -19,4 +19,4 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 # Запуск приложения с использованием ts-node для TypeScript файлов
-CMD ["npm", "run", "start"]
+CMD ["bun", "./main.ts"]
