@@ -19,4 +19,4 @@ ENV NODE_ENV=production
 EXPOSE 4173
 
 # Запуск приложения с использованием ts-node для TypeScript файлов
-CMD ["bun", "run", "build", "&&", "bun", "run", "preview"]
+CMD sh -c "bun run build && bun run preview"
