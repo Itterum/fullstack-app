@@ -12,8 +12,8 @@ docker build -t 127.0.0.1:5000/backend:latest -f backend/Dockerfile ./backend
 docker build -t 127.0.0.1:5000/frontend:latest -f frontend/Dockerfile ./frontend
 
 echo "📤 Загрузка образов в локальный registry..."
-# docker push localhost:5000/backend:latest
-# docker push localhost:5000/frontend:latest
+docker push 127.0.0.1:5000/backend:latest
+docker push 127.0.0.1:5000/frontend:latest
 
 # Обновление образов в манифестах
 sed -i 's|your-registry/backend:latest|localhost:5000/backend:latest|' k8s/backend-deployment.yaml
