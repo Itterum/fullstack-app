@@ -8,7 +8,7 @@ WORKDIR /app
 # Копирование только файлов зависимостей для лучшего кэширования
 COPY package.json bun.lockb ./
 RUN bun install
-RUN bun build
+RUN bun run build
 
 # Копирование остальных файлов проекта
 COPY . .
