@@ -13,7 +13,7 @@ RUN bun install
 COPY . .
 
 # Сборка проекта для production
-RUN bun run build && bun run preview
+RUN bun run build
 
 # Использование lightweight сервера для раздачи статических файлов
 FROM nginx:alpine
@@ -23,3 +23,4 @@ COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
+CMD ["bun", "run", "preview"]
