@@ -8,12 +8,12 @@ kubectl create namespace fullstack --dry-run=client -o yaml | kubectl apply -f -
 
 # Сборка и загрузка Docker образов в локальный registry
 echo "🔨 Сборка Docker образов..."
-docker build -t 127.0.0.1:5000/backend:latest -f backend/Dockerfile ./backend
-docker build -t 127.0.0.1:5000/frontend:latest -f frontend/Dockerfile ./frontend
+docker build -t localhost:5000/backend:latest -f backend/Dockerfile ./backend
+docker build -t localhost:5000/frontend:latest -f frontend/Dockerfile ./frontend
 
 echo "📤 Загрузка образов в локальный registry..."
-docker push 127.0.0.1:5000/backend:latest
-docker push 127.0.0.1:5000/frontend:latest
+docker push localhost:5000/backend:latest
+docker push localhost:5000/frontend:latest
 
 # Обновление образов в манифестах
 sed -i 's|your-registry/backend:latest|localhost:5000/backend:latest|' k8s/backend-deployment.yaml
@@ -45,7 +45,7 @@ kubectl apply -f k8s/argocd-app.yaml
 
 # Настройка доступа к приложению
 echo "🌐 Настройка Ingress..."
-echo "127.0.0.1 fullstack.local" | sudo tee -a /etc/hosts
+echo "localhost fullstack.local" | sudo tee -a /etc/hosts
 
 # Настройка тестов с Playwright
 echo "🧪 Настройка тестов с Playwright..."
