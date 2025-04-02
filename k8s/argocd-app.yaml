@@ -6,13 +6,17 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/Itterum/fullstack-app.git'
+    repoURL: 'https://github.com/Itterum/fullstack-app.git'  # Замените на ваш репозиторий
     path: k8s
     targetRevision: main
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: fullstack
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
