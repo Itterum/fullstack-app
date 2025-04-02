@@ -8,16 +8,16 @@ kubectl create namespace fullstack --dry-run=client -o yaml | kubectl apply -f -
 
 # Сборка и загрузка Docker образов в локальный registry
 echo "🔨 Сборка Docker образов..."
-docker build -t localhost:5000/backend:latest -f backend/Dockerfile ./backend
-docker build -t localhost:5000/frontend:latest -f frontend/Dockerfile ./frontend
+docker build -t local-registry:5000/backend:latest -f backend/Dockerfile ./backend
+docker build -t local-registry:5000/frontend:latest -f frontend/Dockerfile ./frontend
 
 echo "📤 Загрузка образов в локальный registry..."
-docker push localhost:5000/backend:latest
-docker push localhost:5000/frontend:latest
+docker push local-registry:5000/backend:latest
+docker push local-registry:5000/frontend:latest
 
 # Обновление образов в манифестах
-sed -i 's|your-registry/backend:latest|localhost:5000/backend:latest|' k8s/backend-deployment.yaml
-sed -i 's|your-registry/frontend:latest|localhost:5000/frontend:latest|' k8s/frontend-deployment.yaml
+sed -i 's|local-registry/backend:latest|local-registry:5000/backend:latest|' k8s/backend-deployment.yaml
+sed -i 's|local-registry/frontend:latest|local-registry:5000/frontend:latest|' k8s/frontend-deployment.yaml
 
 # Установка ArgoCD если его нет
 if ! kubectl get namespace argocd &> /dev/null; then
