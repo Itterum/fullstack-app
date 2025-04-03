@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tests
+  labels:
+    app: tests
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tests
+  template:
+    metadata:
+      labels:
+        app: tests
+    spec:
+      containers:
+      - name: tests
+        image: itterum/tests:latest
+        imagePullPolicy: Always
+        env:
+        - name: KUBE_NAMESPACE
+          value: "fullstack"
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "100m"
+            memory: "256Mi"

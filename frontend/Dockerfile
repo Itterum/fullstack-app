@@ -1,22 +1,26 @@
-FROM node:18-alpine
+# Этап 1: Сборка фронтенда
+FROM node:18-alpine AS builder
 
-# Установка bun для более быстрой установки зависимостей
 RUN npm install -g bun
 
 WORKDIR /app
 
-# Копирование только файлов зависимостей для лучшего кэширования
 COPY package.json bun.lockb ./
 RUN bun install
 
-# Копирование остальных файлов проекта
 COPY . .
 
-# Настройка переменных окружения
-ENV NODE_ENV=production
+RUN bun run build
 
-# Экспозиция порта
-EXPOSE 4173
+# Этап 2: Сервер Nginx
+FROM nginx:alpine
 
-# Запуск приложения с использованием ts-node для TypeScript файлов
-CMD ["sh", "-c", "bun run build && exec bun run preview"]
+# Копируем билд фронта в Nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Копируем кастомный конфиг Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
